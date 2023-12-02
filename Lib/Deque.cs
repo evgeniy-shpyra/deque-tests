@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Lib
 {
-    internal class DoublyNode<T>
+    public class DoublyNode<T>
     {
         public DoublyNode(T data)
         {
@@ -33,9 +33,13 @@ namespace Lib
         {
         }
 
-
         public void AddFirst(T data)
         {
+            if(data == null)
+            {
+                throw new InvalidOperationException("Неможливо додати null");
+            }
+
             DoublyNode<T> node = new DoublyNode<T>(data);
             DoublyNode<T> temp = head;
             node.Next = temp;
@@ -50,6 +54,11 @@ namespace Lib
         }
         public void AddLast(T data)
         {
+            if (data == null)
+            {
+                throw new InvalidOperationException("Неможливо додати null");
+            }
+
             DoublyNode<T> node = new DoublyNode<T>(data);
 
             if (head == null)
@@ -137,13 +146,10 @@ namespace Lib
         }
         public bool IsEmpty { get { return count == 0; } }
 
-
-
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)this).GetEnumerator();
         }
-
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             DoublyNode<T> current = head;
@@ -153,6 +159,5 @@ namespace Lib
                 current = current.Next;
             }
         }
-
     }
 }

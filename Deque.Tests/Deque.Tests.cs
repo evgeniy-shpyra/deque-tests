@@ -9,6 +9,7 @@ namespace Deque.Tests
     {
         public bool WasCalled { get; private set; }
         public T LastRecordedValue { get; private set; }
+
         public void Record(T value)
         {
             WasCalled = true;
@@ -38,6 +39,8 @@ namespace Deque.Tests
 
             Assert.IsTrue(eventRecorder.WasCalled);
             Assert.AreEqual("second", eventRecorder.LastRecordedValue);
+
+            Assert.ThrowsException<InvalidOperationException>(() => deque.AddFirst(null));
         }
 
         [TestMethod]
@@ -56,6 +59,8 @@ namespace Deque.Tests
 
             Assert.IsTrue(eventRecorder.WasCalled);
             Assert.AreEqual("second", eventRecorder.LastRecordedValue);
+
+            Assert.ThrowsException<InvalidOperationException>(() => deque.AddLast(null));
         }
 
         [TestMethod]
@@ -75,6 +80,12 @@ namespace Deque.Tests
 
             Assert.IsTrue(eventRecorder.WasCalled);
             Assert.AreEqual("first", eventRecorder.LastRecordedValue);
+
+            deque.RemoveFirst();
+            var exception = Assert.ThrowsException<InvalidOperationException>(() => deque.RemoveFirst());
+            Assert.AreEqual("Неможливо видалити елемент. Дек порожній.", exception.Message);
+
+            Assert.AreEqual(0, deque.Count);
         }
 
         [TestMethod]
@@ -94,6 +105,12 @@ namespace Deque.Tests
 
             Assert.IsTrue(eventRecorder.WasCalled);
             Assert.AreEqual("second", eventRecorder.LastRecordedValue);
+
+            deque.RemoveLast();
+            var exception = Assert.ThrowsException<InvalidOperationException>(() => deque.RemoveLast());
+            Assert.AreEqual("Неможливо видалити елемент. Дек порожній.", exception.Message);
+
+            Assert.AreEqual(0, deque.Count);
         }
 
         [TestMethod]
@@ -123,6 +140,9 @@ namespace Deque.Tests
 
             Assert.IsTrue(deque.Contains("first"));
             Assert.IsFalse(deque.Contains("third"));
+
+            deque.Clear();
+            Assert.IsFalse(deque.Contains("first"));
         }
 
         [TestMethod]
